@@ -29,6 +29,11 @@ def log():
 def recieve():
     files = request.files
     # upload each file to S3
+    for f in files:
+        pass
+    # process files and upload to sql
+    for f in files:
+        pass
     print(files)
 
 run(app, host='localhost', port=PORT)
