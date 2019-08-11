@@ -1,0 +1,14 @@
+[info]
+name = "data_processor"
+version = "0.0.1"
+description = ""
+
+[deployment]
+type = "PORT"
+dest = 4000
+scripts = ['make install']
+artifact_folder = ""
+
+[config]
+aws_access_key = "ENV:AWS_ACCESS_KEY"
+aws_secret_key = "ENV:AWS_SECRET_KEY"
