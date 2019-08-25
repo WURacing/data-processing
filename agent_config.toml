@@ -10,5 +10,9 @@ scripts = ['make install']
 artifact_folder = ""
 
 [config]
-aws_access_key = "ENV:AWS_ACCESS_KEY"
-aws_secret_key = "ENV:AWS_SECRET_KEY"
+aws_access_key = ""
+aws_secret_key = ""
+mysql_usr = ""
+mysql_pwd = ""
+mysql_host = ""
+mysql_db = ""
