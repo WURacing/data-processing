@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import ReactSpeedometer from "react-d3-speedometer";
+//npm install --save react-d3-speedometer
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
