@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import ProgressBar from 'react-bootstrap/ProgressBar';
+import ReactSpeedometer from "react-d3-speedometer";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
@@ -10,8 +10,8 @@ export class EngineSpeed extends Component{
         this.state = {
             Rpm: 4000,
             MaxRpm: 8000,
-            Redline: 6000,
             Mod: 5,
+            engineLoad: 50,
         };
     }
     
@@ -29,37 +29,28 @@ export class EngineSpeed extends Component{
         }
         this.setState(state =>{
             state.Rpm += this.state.Mod;
+            //rounded to prevent constant changing of # of digits which jitters the text and makes it unreadable
+            state.engineLoad = Math.round(100*state.Rpm/this.state.MaxRpm);
             return state;
         });
     }
 
     render(){
-        if (this.state.Rpm <= this.state.Redline){
-            return(
-                <>
-                    <div style={{width: 400, margin: 20}}>
-                        <p>Engine Load: {100*this.state.Rpm/this.state.MaxRpm}%</p>
-                        <p>Engine Speed(rpm): {this.state.Rpm}</p>
-                        <ProgressBar>
-                            <ProgressBar variant="warning" now={this.state.Rpm} max={this.state.MaxRpm} key={1}/>
-                        </ProgressBar>
-                    </div>
-                </>
-            );
-        } else {
-            return(
-                <>
-                    <div style={{width: 400, margin: 20}}>
-                        <p>Engine Load: {100*this.state.Rpm/this.state.MaxRpm}%</p>
-                        <p>Engine Speed(rpm): {this.state.Rpm}</p>
-                        <ProgressBar>
-                            <ProgressBar variant="warning" now={this.state.Redline} max={this.state.MaxRpm} key={1}/>
-                            <ProgressBar variant="danger" now={this.state.Rpm-this.state.Redline} max={this.state.MaxRpm} key={2}/>
-                        </ProgressBar>
-                    </div>
-                </>
-            );
-        }
+        return(
+            <>
+                <div>
+                    <ReactSpeedometer 
+                        value={this.state.Rpm} 
+                        currentValueText={`${this.state.engineLoad}% ${this.state.Rpm}RPM`}
+                        startColor="green" 
+                        endColor="red" 
+                        needleColor="steelblue" 
+                        maxValue={this.state.MaxRpm}
+                        needleTransitionDuration={0}
+                    />
+                </div>
+            </>
+        );
     }
 }
 export default EngineSpeed;
