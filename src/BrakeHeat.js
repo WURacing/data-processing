@@ -61,9 +61,9 @@ export class BrakeHeat extends Component{
             <>
                 <div class="brake-container">
                     <CircularProgressbar
-                        value={this.state.FR}
+                        value={this.state.FL}
                         maxValue={this.state.MaxHeat}
-                        text={`${this.state.FR}°F`}
+                        text={`${this.state.FL}°F`}
                         styles={{
                             root: {},
                             path: {
