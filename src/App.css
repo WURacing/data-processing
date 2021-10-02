@@ -13,30 +13,29 @@
   }
 }
 
-
-.formGroup{
+.formGroup {
   display: flex;
 }
 
-label{
+label {
   padding-right: 1%;
   padding-left: 1%;
 }
 
-.GridOptions{
+.GridOptions {
   padding: 1%;
 }
 
-.downloadTarget{
+.downloadTarget {
   margin: auto;
   background-color: white;
 }
 
-.chartTitleForm{
+.chartTitleForm {
   width: 90%;
 }
 
-.traces{
+.traces {
   display: inline-flex;
   padding-left: 1%;
 }
@@ -46,7 +45,7 @@ label{
   padding-left: 1%;
 }
 
-input[type=text]{
+input[type=text] {
   width: 25%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -54,5 +53,3 @@ input[type=text]{
   border-radius: 4px;
   box-sizing: border-box;
 }
-
-

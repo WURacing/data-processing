@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import ReactGrid from './Components/ReactGrid.js'
+import ReactGrid from './Components/ReactGrid';
 
 function App() {
   return (

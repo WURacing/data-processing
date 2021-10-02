@@ -1,26 +1,24 @@
-import React from 'react'
+import React from 'react';
 
-class Checkbox extends React.Component{
-    constructor(props){
-        super(props)
-        this.state = {
-            selected : false,
-            id: props.id
+class Checkbox extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selected: false,
+      id: props.id,
+    };
+  }
+
+    handleSelected = (e) => {
+      this.setState({ selected: e.target.checked }, () => {
+        if (this.props.onChange) {
+          this.props.onChange(this.state);
         }
+      });
     }
 
-
-    handleSelected = (e) => { 
-        this.setState({selected : e.target.checked}, () => {
-            if(this.props.onChange){
-                this.props.onChange(this.state)
-            }
-        })
-    }
-
-
-    render(){
-        return(
+    render() {
+      return (
             <div className={this.props.class}>
                 <label htmlFor={this.props.name}>{this.props.name}</label>
                 <input onChange={this.handleSelected}
@@ -29,7 +27,7 @@ class Checkbox extends React.Component{
                     name={this.props.name}
                 ></input>
             </div>
-        );
+      );
     }
 }
 
