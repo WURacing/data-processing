@@ -3,13 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@handsontable/react": "^5.0.0",
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^12.8.3",
     "dom-to-image": "^2.6.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "handsontable": "^8.3.2",
     "js-file-download": "^0.4.12",
     "react": "^17.0.2",
     "react-color": "^2.19.3",
@@ -18,6 +15,9 @@
     "reactcss": "^1.2.3",
     "recharts": "^2.0.9",
     "web-vitals": "^1.1.1"
+  },
+  "devDependencies": {
+    "eslint-config-airbnb-base": "^14.2.1"
   },
   "scripts": {
     "start": "react-scripts start",

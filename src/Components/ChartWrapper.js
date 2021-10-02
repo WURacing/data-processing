@@ -33,41 +33,8 @@ class ChartWrapper extends React.Component {
   }
 
   renderChart() {
-    switch (this.state.currentChartType) {
-      case 'Line':
-        return <RenderLineChart
-                  strokes={this.props.strokes}
-                  data={this.props.data}
-                  traceIndex={this.props.traceIndex}
-                  traceLabels={this.props.traceLabels}
-                  graphHeight={this.state.graphHeight}
-                  graphWidth={this.state.graphWidth}/>;
-      case 'Area':
-        return <RenderAreaChart
-                  strokes={this.props.strokes}
-                  data={this.props.data}
-                  traceIndex={this.props.traceIndex}
-                  traceLabels={this.props.traceLabels}
-                  graphHeight={this.state.graphHeight}
-                  graphWidth={this.state.graphWidth}/>;
-      case 'Bar':
-        return <RenderBarChart
-                strokes={this.props.strokes}
-                data={this.props.data}
-                traceIndex={this.props.traceIndex}
-                traceLabels={this.props.traceLabels}
-                graphHeight={this.state.graphHeight}
-                graphWidth={this.state.graphWidth}/>;
-      case 'Scatter':
-        return <RenderScatterChart
-                strokes={this.props.strokes}
-                data={this.props.data}
-                traceIndex={this.props.traceIndex}
-                traceLabels={this.props.traceLabels}
-                graphHeight={this.state.graphHeight}
-                graphWidth={this.state.graphWidth}/>;
-      case 'Composed':
-        return <RenderComposedChart
+    if (this.state.currentChartType === 'Composed') {
+      return <RenderComposedChart
                 strokes={this.props.strokes}
                 data={this.props.data}
                 traceIndex={this.props.traceIndex}
@@ -75,19 +42,34 @@ class ChartWrapper extends React.Component {
                 graphHeight={this.state.graphHeight}
                 graphWidth={this.state.graphWidth}
                 composedLines={this.props.composedLines}/>;
-      default:
-        return <h3>No chart type selected somehow</h3>;
     }
+    const chartTypeMap = {
+      Line: RenderLineChart,
+      Area: RenderAreaChart,
+      Bar: RenderBarChart,
+      Scatter: RenderScatterChart,
+    };
+    const ChartType = chartTypeMap[this.state.currentChartType];
+    if (ChartType === undefined) {
+      return <h3>No chart type selected somehow</h3>;
+    }
+    return <ChartType
+              strokes={this.props.strokes}
+              data={this.props.data}
+              traceIndex={this.props.traceIndex}
+              traceLabels={this.props.traceLabels}
+              graphHeight={this.state.graphHeight}
+              graphWidth={this.state.graphWidth}/>;
   }
 
   handleWidth = (e) => {
     if (isNaN(e.target.value)) { return; }
-    this.setState({ graphWidth: parseInt(e.target.value) });
+    this.setState({ graphWidth: Math.max(100, parseInt(e.target.value)) });
   }
 
   handleHeight = (e) => {
     if (isNaN(e.target.value)) { return; }
-    this.setState({ graphHeight: parseInt(e.target.value) });
+    this.setState({ graphHeight: Math.max(100, parseInt(e.target.value)) });
   }
 
   noTyping = (e) => {
@@ -96,17 +78,17 @@ class ChartWrapper extends React.Component {
 
   render() {
     return (
-          <div className="ChartWrapper">
-              <div className="chartSelector">
-                  <label htmlFor="ChartSelector">Select Chart Type</label>
-                  <select onChange={this.handleChartTypeChange} defaultValue="Line" name="ChartSelector">{this.chartTypeDropDownOptions()}</select>
-                  <label htmlFor="width">Width</label>
-                  <input name="width" type="number" min="100" max="1920" onChange={this.handleWidth} step="10" oninput={this.noTyping}></input>
-                  <label htmlFor="height">Height</label>
-                  <input name="height" type="number" max="1080" min="100" onChange={this.handleHeight} step="10" onKeyDown={this.noTyping}></input>
-              </div>
-              {this.renderChart()}
-          </div>
+      <div className="ChartWrapper">
+        <div className="chartSelector">
+          <label htmlFor="ChartSelector">Select Chart Type</label>
+          <select onChange={this.handleChartTypeChange} defaultValue="Line" name="ChartSelector">{this.chartTypeDropDownOptions()}</select>
+          <label htmlFor="width">Width</label>
+          <input name="width" type="number" min="100" max="1920" onChange={this.handleWidth} step="10" onInput={this.noTyping}></input>
+          <label htmlFor="height">Height</label>
+          <input name="height" type="number" max="1080" min="100" onChange={this.handleHeight} step="10" onKeyDown={this.noTyping}></input>
+        </div>
+        {this.renderChart()}
+      </div>
     );
   }
 }

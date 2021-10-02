@@ -9,26 +9,26 @@ class Checkbox extends React.Component {
     };
   }
 
-    handleSelected = (e) => {
-      this.setState({ selected: e.target.checked }, () => {
-        if (this.props.onChange) {
-          this.props.onChange(this.state);
-        }
-      });
-    }
+  handleSelected = (e) => {
+    this.setState({ selected: e.target.checked }, () => {
+      if (this.props.onChange) {
+        this.props.onChange(this.state);
+      }
+    });
+  }
 
-    render() {
-      return (
-            <div className={this.props.class}>
-                <label htmlFor={this.props.name}>{this.props.name}</label>
-                <input onChange={this.handleSelected}
-                    type="checkbox"
-                    id={this.props.id}
-                    name={this.props.name}
-                ></input>
-            </div>
-      );
-    }
+  render() {
+    return (
+      <div className={this.props.class}>
+        <label htmlFor={this.props.name}>{this.props.name}</label>
+        <input onChange={this.handleSelected}
+          type="checkbox"
+          id={this.props.id}
+          name={this.props.name}
+        ></input>
+      </div>
+    );
+  }
 }
 
 export default Checkbox;
