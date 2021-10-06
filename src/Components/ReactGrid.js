@@ -76,7 +76,6 @@ class ReactGrid extends React.Component {
     const newComposedTypes = this.state.composedLines;
     const newType = e.target.value;
     newComposedTypes[index] = newType;
-    console.log(newComposedTypes);
     this.setState({ composedLines: newComposedTypes });
   }
 
