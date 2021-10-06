@@ -1,11 +1,12 @@
 import React from 'react';
 import {
-  ComposedChart, Area, Line, Scatter, Bar, CartesianGrid, XAxis, YAxis, Tooltip, Legend,
+  BarChart, Bar, LineChart, Line, ScatterChart, Scatter, AreaChart, Area,
+  CartesianGrid, XAxis, YAxis, Tooltip, Legend,
 } from 'recharts';
 import domtoimage from 'dom-to-image';
 import fileDownload from 'js-file-download';
 
-class RenderComposedChart extends React.Component {
+class RenderGenericChart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -21,9 +22,30 @@ class RenderComposedChart extends React.Component {
     };
   }
 
+  chartElement() {
+    switch (this.props.chartType) {
+      case 'Line': return LineChart;
+      case 'Scatter': return ScatterChart;
+      case 'Bar': return BarChart;
+      case 'Area': return AreaChart;
+      default: return undefined;
+    }
+  }
+
+  chartDataElement() {
+    switch (this.props.chartType) {
+      case 'Line': return Line;
+      case 'Scatter': return Scatter;
+      case 'Bar': return Bar;
+      case 'Area': return Area;
+      default: return undefined;
+    }
+  }
+
   renderLines() {
     const lines = [];
     if (this.props.traceIndex === undefined) { return undefined; }
+    const ChartElement = this.chartDataElement();
     this.props.traceIndex.forEach((key) => {
       let stroke = '#8884d8';
       let label = key;
@@ -37,30 +59,17 @@ class RenderComposedChart extends React.Component {
           label = this.props.traceLabels[key];
         }
       }
-      lines.push(this.determineLine(key, stroke, label));
+
+      lines.push(<ChartElement
+                  type={this.state.lineType}
+                  key={key}
+                  dataKey={key}
+                  stroke={stroke}
+                  name={label}
+                  strokeWidth={this.state.lineWeight}
+                  fill={stroke}/>);
     });
     return lines;
-  }
-
-  determineLine(key, stroke, label) {
-    const componentMap = {
-      Line,
-      Area,
-      Scatter,
-      Bar,
-    };
-    let GraphComponent = componentMap[this.props.composedLines[key]];
-    if (GraphComponent === undefined) {
-      GraphComponent = Line;
-    }
-    return <GraphComponent
-            type={this.state.lineType}
-            key={key}
-            dataKey={key}
-            stroke={stroke}
-            name={label}
-            strokeWidth={this.state.lineWeight}
-            fill={stroke}/>;
   }
 
   lineTypeDropDownOptions() {
@@ -113,6 +122,7 @@ class RenderComposedChart extends React.Component {
   }
 
   render() {
+    const ChartType = this.chartElement();
     return (
       <div className="ChartRender">
         <div className="chartTitleForm">
@@ -130,7 +140,7 @@ class RenderComposedChart extends React.Component {
         </div>
         <h4>{this.state.chartTile}</h4>
         <div className="downloadTarget" id="LineChartTarget">
-          <ComposedChart
+          <ChartType
             width={this.props.graphWidth}
             height={this.props.graphHeight}
             data={this.props.data} margin={{
@@ -142,7 +152,7 @@ class RenderComposedChart extends React.Component {
               <Tooltip />
               {this.renderLines()}
               <Legend verticalAlign="top"/>
-          </ComposedChart>
+          </ChartType>
         </div>
         <button onClick={this.exportPNG}>PNG</button>
       </div>
@@ -150,4 +160,4 @@ class RenderComposedChart extends React.Component {
   }
 }
 
-export default RenderComposedChart;
+export default RenderGenericChart;

@@ -58,85 +58,84 @@ class RenderScatterChart extends React.Component {
     return options;
   }
 
-    handleChartTitle = (e) => {
-      e.preventDefault();
-      this.setState({ chartTile: e.target.value });
-    }
+  handleChartTitle = (e) => {
+    e.preventDefault();
+    this.setState({ chartTile: e.target.value });
+  }
 
-    handleLineWeight = (e) => {
-      e.preventDefault();
-      this.setState({ lineWeight: e.target.value });
-    }
+  handleLineWeight = (e) => {
+    e.preventDefault();
+    this.setState({ lineWeight: e.target.value });
+  }
 
-    handleLineType = (e) => {
-      e.preventDefault();
-      this.setState({ lineType: e.target.value });
-    }
+  handleLineType = (e) => {
+    e.preventDefault();
+    this.setState({ lineType: e.target.value });
+  }
 
-    handleXAxisTitle = (e) => {
-      e.preventDefault();
-      this.setState({ XAxisLabel: e.target.value });
-    }
+  handleXAxisTitle = (e) => {
+    e.preventDefault();
+    this.setState({ XAxisLabel: e.target.value });
+  }
 
-    handleYAxisTitle = (e) => {
-      e.preventDefault();
-      this.setState({ YAxisLabel: e.target.value });
-    }
+  handleYAxisTitle = (e) => {
+    e.preventDefault();
+    this.setState({ YAxisLabel: e.target.value });
+  }
 
-    handleDomainMinChange =(e) => {
-      e.preventDefault();
-      this.setState({ Domain: [e.target.value, this.state.Domain[1]] });
-    }
+  handleDomainMinChange =(e) => {
+    e.preventDefault();
+    this.setState({ Domain: [e.target.value, this.state.Domain[1]] });
+  }
 
-    handleDomainMaxChange = (e) => {
-      e.preventDefault();
-      this.setState({ Domain: [this.state.Domain[0], e.target.value] });
-    }
+  handleDomainMaxChange = (e) => {
+    e.preventDefault();
+    this.setState({ Domain: [this.state.Domain[0], e.target.value] });
+  }
 
-    exportPNG() {
-      domtoimage.toBlob(document.getElementsByClassName('downloadTarget')[0])
-        .then((blob) => {
-          fileDownload(blob, 'Chart.png');
-        });
-    }
+  exportPNG() {
+    domtoimage.toBlob(document.getElementsByClassName('downloadTarget')[0])
+      .then((blob) => {
+        fileDownload(blob, 'Chart.png');
+      });
+  }
 
-    render() {
-      return (
-                <div className="ChartRender">
-                    <div className="chartTitleForm">
-                        <div className="formGroup">
-                        <label htmlFor="chartTile">Chart Title </label>
-                        <input name="chartTitle" type="text" onChange={this.handleChartTitle}></input>
-                        <label htmlFor="XAxisLabel">X Axis Label </label>
-                        <input name="XAxisLabel" type="text" onChange={this.handleXAxisTitle}></input>
-                        <label htmlFor="YAxisLabel">Y Axis Label </label>
-                        <input name="YAxisLabel" type="text" onChange={this.handleYAxisTitle}></input>
-                        </div>
-                        <label htmlFor="lineWeight">Line Weight</label>
-                        <input name="lineWeight" type="number" max="50" onChange={this.handleLineWeight}></input>
-
-                        <select name="lineType" onChange={this.handleLineType}>{this.lineTypeDropDownOptions()}</select>
-                    </div>
-                    <h4>{this.state.chartTile}</h4>
-                    <div className="downloadTarget" id="LineChartTarget">
-                        <ScatterChart
-                          width={this.props.graphWidth}
-                          height={this.props.graphHeight}
-                          data={this.props.data} margin={{
-                            top: 5, right: 20, bottom: 5, left: 0,
-                          }}>
-                            <CartesianGrid stroke="#ccc" strokeDasharray="5 5" fill="white"/>
-                            <XAxis label={this.state.XAxisLabel} domain={this.state.Domain}/>
-                            <YAxis label={this.state.YAxisLabel} />
-                            <Tooltip />
-                            {this.renderLines()}
-                            <Legend verticalAlign="top"/>
-                        </ScatterChart>
-                    </div>
-                    <button onClick={this.exportPNG}>PNG</button>
-                </div>
-      );
-    }
+  render() {
+    return (
+      <div className="ChartRender">
+        <div className="chartTitleForm">
+          <div className="formGroup">
+            <label htmlFor="chartTile">Chart Title </label>
+            <input name="chartTitle" type="text" onChange={this.handleChartTitle}></input>
+            <label htmlFor="XAxisLabel">X Axis Label </label>
+            <input name="XAxisLabel" type="text" onChange={this.handleXAxisTitle}></input>
+            <label htmlFor="YAxisLabel">Y Axis Label </label>
+            <input name="YAxisLabel" type="text" onChange={this.handleYAxisTitle}></input>
+          </div>
+          <label htmlFor="lineWeight">Line Weight</label>
+          <input name="lineWeight" type="number" max="50" onChange={this.handleLineWeight}></input>
+          <select name="lineType" onChange={this.handleLineType}>{this.lineTypeDropDownOptions()}</select>
+        </div>
+        <h4>{this.state.chartTile}</h4>
+        <div className="downloadTarget" id="LineChartTarget">
+          <ScatterChart
+            width={this.props.graphWidth}
+            height={this.props.graphHeight}
+            data={this.props.data} margin={{
+              top: 5, right: 20, bottom: 5, left: 0,
+            }}>
+              <CartesianGrid stroke="#ccc" strokeDasharray="5 5" fill="white"/>
+              <XAxis label={this.state.XAxisLabel} domain={this.state.Domain}/>
+              <YAxis label={this.state.YAxisLabel} />
+              <Tooltip />
+              {this.renderLines()}
+              <Legend verticalAlign="top"/>
+          </ScatterChart>
+        </div>
+        <button onClick={this.exportPNG}>PNG</button>
+      </div>
+    );
+  }
 }
 
 export default RenderScatterChart;

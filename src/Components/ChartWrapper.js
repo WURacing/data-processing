@@ -1,9 +1,10 @@
 import React from 'react';
-import RenderLineChart from './LineChart';
-import RenderAreaChart from './AreaChart';
-import RenderBarChart from './BarChart';
-import RenderScatterChart from './ScatterPlot';
+// import RenderLineChart from './LineChart';
+// import RenderAreaChart from './AreaChart';
+// import RenderBarChart from './BarChart';
+// import RenderScatterChart from './ScatterPlot';
 import RenderComposedChart from './ComposedChart';
+import RenderGenericChart from './GenericChart';
 
 class ChartWrapper extends React.Component {
   constructor(props) {
@@ -43,17 +44,8 @@ class ChartWrapper extends React.Component {
                 graphWidth={this.state.graphWidth}
                 composedLines={this.props.composedLines}/>;
     }
-    const chartTypeMap = {
-      Line: RenderLineChart,
-      Area: RenderAreaChart,
-      Bar: RenderBarChart,
-      Scatter: RenderScatterChart,
-    };
-    const ChartType = chartTypeMap[this.state.currentChartType];
-    if (ChartType === undefined) {
-      return <h3>No chart type selected somehow</h3>;
-    }
-    return <ChartType
+    return <RenderGenericChart
+              chartType={this.state.currentChartType}
               strokes={this.props.strokes}
               data={this.props.data}
               traceIndex={this.props.traceIndex}

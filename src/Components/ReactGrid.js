@@ -38,8 +38,11 @@ class ReactGrid extends React.Component {
 
   handleTraceSelectorForm = (e) => {
     const index = parseInt(e.target.id);
+
     const newTraceSelector = this.state.traceSelector;
-    newTraceSelector[index] = e.target.checked;
+    if (e.target.type === 'checkbox') {
+      newTraceSelector[index] = e.target.checked;
+    }
     const newTraceIndex = [];
     for (let key = 0; key < newTraceSelector.length; key++) {
       if (newTraceSelector[key] === true) {
