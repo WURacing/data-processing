@@ -1,8 +1,4 @@
 import React from 'react';
-// import RenderLineChart from './LineChart';
-// import RenderAreaChart from './AreaChart';
-// import RenderBarChart from './BarChart';
-// import RenderScatterChart from './ScatterPlot';
 import RenderComposedChart from './ComposedChart';
 import RenderGenericChart from './GenericChart';
 
