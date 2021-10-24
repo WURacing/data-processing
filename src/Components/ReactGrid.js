@@ -1,7 +1,6 @@
 import React from 'react';
 import ChartWrapper from './ChartWrapper';
 import Checkbox from './Checkbox';
-import StrokePicker from './StrokePicker';
 
 class ReactGrid extends React.Component {
   constructor(props) {
@@ -78,10 +77,9 @@ class ReactGrid extends React.Component {
     for (let index = 0; index < this.props.keys.length; index++) {
       checkBoxes.push(
         <div className = "Selectors" key={`selector-${index}`}>
-          <Checkbox class="traces" name={this.indexToLabel(index)} id={index} />
-          <StrokePicker id={`${index}_Stroke`} onChange={this.handleStrokePicker} />
-            <label htmlFor="traceLabel">Trace Label</label>
-            <input key={index} id={`${index}_Label`} type="text" maxLength="50" name="traceLabel" className="TraceLabel" onChange={this.handleTraceLabel}/>
+          <Checkbox class="traces" name={this.props.keys[index]} id={index} handleStrokePicker={this.handleStrokePicker} />
+          <label htmlFor="traceLabel">Trace Label</label>
+          <input key={index} id={`${index}_Label`} type="text" maxLength="50" name="traceLabel" className="TraceLabel" onChange={this.handleTraceLabel}/>
         </div>,
       );
       if (this.state.currentChartType === 'Composed') {

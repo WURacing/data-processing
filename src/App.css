@@ -38,11 +38,14 @@ label {
 .traces {
   display: inline-flex;
   padding-left: 1%;
+  align-items: center;
+  min-width: 300px;
 }
 
 .Selectors {
   display: flex;
   padding-left: 1%;
+  align-items: center;
 }
 
 input[type=text] {

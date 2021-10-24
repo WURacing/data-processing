@@ -1,4 +1,5 @@
 import React from 'react';
+import StrokePicker from './StrokePicker';
 
 class Checkbox extends React.Component {
   constructor(props) {
@@ -20,12 +21,13 @@ class Checkbox extends React.Component {
   render() {
     return (
       <div className={this.props.class}>
-        <label htmlFor={this.props.name}>{this.props.name}</label>
         <input onChange={this.handleSelected}
           type="checkbox"
           id={this.props.id}
           name={this.props.name}
-        ></input>
+        />
+        <StrokePicker id={`${this.props.id}_Stroke`} onChange={this.props.handleStrokePicker} />
+        <label htmlFor={this.props.id}>{this.props.name}</label>
       </div>
     );
   }
