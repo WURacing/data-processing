@@ -1,11 +1,10 @@
-import React from 'react';
 import './App.css';
-import ReactGrid from './Components/ReactGrid';
+import DataViewerChart from './Components/DataViewerChart';
 
 function App() {
   return (
     <div className="App">
-      <ReactGrid />
+      <DataViewerChart date="2019-11-24"></DataViewerChart>
     </div>
   );
 }

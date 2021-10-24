@@ -7,15 +7,9 @@ class ReactGrid extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [
-        [10, 1, 15, 30, 40],
-        [15, 10, 30, 12, 13],
-        [5, 20, 11, 14, 13],
-        [0, 30, 15, 12, 13],
-      ],
       traceIndex: [],
       traceSelector: [],
-      traceLabels: [],
+      traceLabels: [...this.props.keys],
       strokes: [],
       file: NaN,
       rowOneDataLabel: false,
@@ -81,7 +75,7 @@ class ReactGrid extends React.Component {
 
   traceOptions() {
     const checkBoxes = [];
-    for (let index = 0; index < this.state.data[0].length; index++) {
+    for (let index = 0; index < this.props.keys.length; index++) {
       checkBoxes.push(
         <div className = "Selectors" key={`selector-${index}`}>
           <Checkbox class="traces" name={this.indexToLabel(index)} id={index} />
@@ -119,7 +113,7 @@ class ReactGrid extends React.Component {
         <ChartWrapper
           onChange={this.handleChartType}
           strokes={this.state.strokes}
-          data={this.state.data}
+          data={this.props.data}
           traceIndex={this.state.traceIndex}
           traceLabels={this.state.traceLabels}
           composedLines={this.state.composedLines}/>
