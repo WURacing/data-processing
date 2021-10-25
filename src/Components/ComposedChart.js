@@ -137,7 +137,7 @@ class RenderComposedChart extends React.Component {
               top: 5, right: 20, bottom: 5, left: 0,
             }}>
               <CartesianGrid stroke="#ccc" strokeDasharray="5 5" fill="white"/>
-              <XAxis label={this.state.XAxisLabel} domain={this.state.Domain}/>
+              <XAxis label={this.state.XAxisLabel} dataKey="time" tickFormatter={(date) => date.toLocaleTimeString()}/>
               <YAxis label={this.state.YAxisLabel} />
               <Tooltip />
               {this.renderLines()}

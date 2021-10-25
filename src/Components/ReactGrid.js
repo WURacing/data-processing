@@ -5,16 +5,20 @@ import Checkbox from './Checkbox';
 class ReactGrid extends React.Component {
   constructor(props) {
     super(props);
+    const labels = {};
+    this.props.keys.forEach((key) => {
+      labels[key] = key;
+    });
     this.state = {
       traceIndex: [],
       traceSelector: [],
-      traceLabels: [...this.props.keys],
+      traceLabels: labels,
       strokes: [],
       file: NaN,
       rowOneDataLabel: false,
       downloadFileName: 'data',
       currentChartType: 'Line',
-      composedLines: [],
+      composedLines: {},
     };
   }
 
@@ -39,7 +43,7 @@ class ReactGrid extends React.Component {
     const newTraceIndex = [];
     for (let key = 0; key < newTraceSelector.length; key++) {
       if (newTraceSelector[key] === true) {
-        newTraceIndex.push(key);
+        newTraceIndex.push(this.props.keys[key]);
       }
     }
     this.setState({
@@ -57,18 +61,18 @@ class ReactGrid extends React.Component {
 
   handleTraceLabel = (e) => {
     e.preventDefault();
-    const index = parseInt(e.target.id);
+    const { key } = e.target.dataset;
     const newTraceLabels = this.state.traceLabels;
     const newTraceLabel = e.target.value;
-    newTraceLabels[index] = newTraceLabel;
+    newTraceLabels[key] = newTraceLabel;
     this.setState({ traceLabels: newTraceLabels });
   }
 
   handleComposedType = (e) => {
-    const index = parseInt(e.target.id);
+    const { key } = e.target.dataset;
     const newComposedTypes = this.state.composedLines;
     const newType = e.target.value;
-    newComposedTypes[index] = newType;
+    newComposedTypes[key] = newType;
     this.setState({ composedLines: newComposedTypes });
   }
 
@@ -79,14 +83,14 @@ class ReactGrid extends React.Component {
         <div className = "Selectors" key={`selector-${index}`}>
           <Checkbox class="traces" name={this.props.keys[index]} id={index} handleStrokePicker={this.handleStrokePicker} />
           <label htmlFor="traceLabel">Trace Label</label>
-          <input key={index} id={`${index}_Label`} type="text" maxLength="50" name="traceLabel" className="TraceLabel" onChange={this.handleTraceLabel}/>
+          <input key={index} data-key={this.props.keys[index]} id={`${index}_Label`} type="text" maxLength="50" name="traceLabel" className="TraceLabel" onChange={this.handleTraceLabel}/>
         </div>,
       );
       if (this.state.currentChartType === 'Composed') {
         checkBoxes.push(
           <div className="ComposedType" key={`composed-${index}`}>
             <label>Trace Line Type</label>
-              <select name="ComposedLineType" id={index} onChange={this.handleComposedType}>
+              <select name="ComposedLineType" data-key={this.props.keys[index]} onChange={this.handleComposedType}>
                 <option value="Line">Line</option>
                 <option value="Area">Area</option>
                 <option value="Bar">Bar</option>
