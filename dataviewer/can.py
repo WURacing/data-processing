@@ -1,5 +1,4 @@
 from csv import DictReader
-from typing import Any
 from cantools.database import load_file
 from flask import current_app
 
