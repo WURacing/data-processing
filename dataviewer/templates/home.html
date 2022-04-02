@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Data Viewer</h1>
+    <h2>Upload Data</h2>
+    <a href="/upload">
+        <button onclick="uploadData()">Upload</button>
+    </a>
+    <h2>Available Runs</h2>
+    {% for run in runs %}
+        <a href="{{ run.url }}">{{ run.name }}</a>
+    {% endfor %}
+{% endblock %}
