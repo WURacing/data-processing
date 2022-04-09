@@ -5,6 +5,7 @@ from flask import Blueprint, render_template, request, send_file, url_for
 
 from dataviewer.can import decode_csv
 from dataviewer.config import get_config
+from dataviewer.models import Run
 
 
 server = Blueprint('server', __name__)
@@ -42,4 +43,8 @@ def upload_file():
             writer.writerow(row)
 
     return "File uploaded successfully"
+
+@server.get('/runs')
+def runs():
+    return str(Run.query.all())
     
