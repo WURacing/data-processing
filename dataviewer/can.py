@@ -1,12 +1,13 @@
 from csv import DictReader
 from cantools.database import load_file
-from flask import current_app
+
+from dataviewer.config import get_config
 
 EXTENDED_MASK = 0x1FFFFFFF
 
 def decode_csv(reader: DictReader) -> tuple[list[dict[str, float | str]], list[str]]:
-    can_file = current_app.config['CAN_FILE']
-    dbc = load_file(can_file)
+    config = get_config()
+    dbc = load_file(config.can_file)
 
     field_names = set()
     messages = []
