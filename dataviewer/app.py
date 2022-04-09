@@ -12,11 +12,11 @@ def create_app() -> Flask:
 
     app = Flask(__name__)
     config = Config()
-    app.config['config'] = config
+    app.config["config"] = config
 
     app.register_blueprint(server)
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SQLALCHEMY_DATABASE_URI'] = config.database_uri
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["SQLALCHEMY_DATABASE_URI"] = config.database_uri
     db.init_app(app)
 
     return app

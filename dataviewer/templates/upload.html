@@ -1,8 +1,22 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>Upload Data</h1>
-<form method="POST" enctype="multipart/form-data">
-    <input type="file" accept="text/csv" id="file" name="file">
+<form method="POST" enctype="multipart/form-data"
+    style="display: flex; flex-direction: column; max-width: fit-content; gap: 30px">
+    <div style="display: flex; gap: 5px;">
+        <label for="location">Location: </label>
+        <input type="text" id="location" name="location" placeholder="Location..." required>
+    </div>
+    <div style="display: flex; gap: 5px;">
+        <label for="date">Run Date/Time: </label>
+        <input type="date" id="date" name="date" placeholder="Date/Time" required>
+        <input type="time" id="time" name="time" placeholder="Date/Time" required>
+    </div>
+    <div style="display: flex; gap: 5px;">
+        <label for="location">DBC File: </label>
+        <input type="text" id="dbc" name="dbc" placeholder="DBC File Name..." required>
+    </div>
+    <input type="file" accept="text/csv" id="file" name="file" required>
     <button>Upload</button>
 </form>
 {% endblock %}

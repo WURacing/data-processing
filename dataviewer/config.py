@@ -7,8 +7,8 @@ from flask import current_app
 @dataclass(frozen=True)
 class Config:
     """Configuration for the data viewer."""
-    upload_folder: str = os.environ.get('UPLOAD_FOLDER', 'uploads')
-    can_file: str = os.environ.get('CAN_FILE', '../VEHICLE.dbc')
+
+    can_file: str = os.environ.get("CAN_FILE", "../VEHICLE.dbc")
     port: str = os.environ.get("WAREHOUSE_POSTGRES_PORT", "5432")
     dialect: str = os.environ.get("DATABASE_DIALECT", "postgresql")
     driver: str = os.environ.get("DATABASE_DRIVER", "psycopg2")
@@ -30,7 +30,6 @@ class Config:
         )
 
 
-
 def get_config() -> Config:
     """Get the configuration for the data viewer."""
-    return current_app.config['config']
+    return current_app.config["config"]

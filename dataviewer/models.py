@@ -18,6 +18,7 @@ class Timeseries(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     run_id = db.Column(db.Integer, db.ForeignKey("runs.id"), nullable=False)
-    timestamp = db.Column(db.Integer, nullable=False) 
+    run = db.relationship("Run", backref=db.backref("data", lazy=True))
+    timestamp = db.Column(db.Integer, nullable=False)
     msg_id = db.Column(db.Integer, nullable=False)
-    msg_data = db.Column(db.String(16), nullable=False)
+    data = db.Column(db.String(16), nullable=False)
