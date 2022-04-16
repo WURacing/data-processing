@@ -3,7 +3,7 @@ from csv import DictReader, DictWriter
 from io import BytesIO, StringIO, TextIOWrapper
 from flask import Blueprint, render_template, request, send_file, url_for
 
-from dataviewer.can import decode_csv
+from dataviewer.can import decode_csv, get_variables, required_messages
 from dataviewer.models import Run, Timeseries, db
 
 server = Blueprint("server", __name__)
@@ -14,8 +14,11 @@ def index():
     runs = Run.query.all()
     run_info = [
         {
-            "name": f"{run.location} on {run.datetime.isoformat()}",
-            "url": url_for("server.download_run", run_id=run.id),
+            "location": run.location,
+            "date": run.datetime.strftime("%d %b %Y"),
+            "time": run.datetime.strftime("%I:%M:%S %p"),
+            "download_url": url_for("server.download_run", run_id=run.id),
+            "filter_url": url_for("server.filter_run", run_id=run.id),
         }
         for run in runs
     ]
@@ -33,13 +36,41 @@ def download_run(run_id: int):
     data = Timeseries.query.filter_by(run_id=run_id).all()
     rows, names = decode_csv(data)
 
-    f = StringIO()
-    writer = DictWriter(f, fieldnames=names)
+    buffer = StringIO()
+    writer = DictWriter(buffer, fieldnames=names)
     writer.writeheader()
     for row in rows:
         writer.writerow(row)
     return send_file(
-        BytesIO(f.getvalue().encode("utf-8")),
+        BytesIO(buffer.getvalue().encode("utf-8")),
+        mimetype="text/csv",
+        download_name=f"{run.location}_{run.datetime.isoformat()}.csv",
+    )
+
+
+@server.post("/download/<int:run_id>/filter")
+def download_run_filtered(run_id: int):
+    sensors = []
+    for name, value in request.form.items():
+        if value == "on":
+            sensors.append(name)
+
+    messages = required_messages(sensors)
+
+    run = Run.query.filter_by(id=run_id).first_or_404()
+    data = (
+        Timeseries.query.filter_by(run_id=run_id)
+        .filter(Timeseries.msg_id.in_(messages))
+        .all()
+    )
+    rows, names = decode_csv(data, signals=set(sensors))
+    buffer = StringIO()
+    writer = DictWriter(buffer, fieldnames=names)
+    writer.writeheader()
+    for row in rows:
+        writer.writerow(row)
+    return send_file(
+        BytesIO(buffer.getvalue().encode("utf-8")),
         mimetype="text/csv",
         download_name=f"{run.location}_{run.datetime.isoformat()}.csv",
     )
@@ -72,6 +103,22 @@ def upload_file():
     return "File uploaded successfully"
 
 
-@server.get("/runs")
-def runs():
-    return str(list(Run.query.all()))
+@server.get("/filter/<int:run_id>")
+def filter_run(run_id: int):
+    run = Run.query.filter_by(id=run_id).first_or_404()
+
+    msg_ids = (
+        Timeseries.query.filter_by(run_id=run_id)
+        .with_entities(Timeseries.msg_id)
+        .distinct()
+        .all()
+    )
+    variables = get_variables([entry[0] for entry in msg_ids])
+
+    return render_template(
+        "filter.html",
+        run_location=run.location,
+        run_datetime=run.datetime.strftime("%d %b %Y"),
+        variables=variables,
+        download_url=url_for("server.download_run_filtered", run_id=run_id),
+    )
