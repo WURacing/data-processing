@@ -7,9 +7,38 @@
     <button onclick="uploadData()">Upload</button>
 </a>
 <h2>Available Runs</h2>
-<ul id="available-runs">
-    {% for run in runs %}
-    <li><a href="{{ run.url }}">{{ run.name }}</a></li>
-    {% endfor %}
-</ul>
+<table>
+    <thead>
+        <tr>
+            <th>Run Location</th>
+            <th>Run Date</th>
+            <th>Run Time</th>
+            <th>Download All</th>
+            <th>Filter Data</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for run in runs %}
+        <tr>
+            <td>{{ run.location }}</td>
+            <td>{{ run.date }}</td>
+            <td>{{ run.time }}</td>
+            <td>
+                <a href="{{ run.download_url }}">
+                    <button>Download</button>
+                </a>
+            </td>
+            <td>
+                <a href="{{ run.filter_url }}">
+                    <button>Filter</button>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<!-- {% for run in runs %}
+<li><a href="{{ run.url }}">{{ run.name }}</a></li>
+{% endfor %} -->
+
 {% endblock %}
