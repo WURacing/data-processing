@@ -13,8 +13,11 @@
         <input type="time" id="time" name="time" placeholder="Date/Time" required>
     </div>
     <div style="display: flex; gap: 5px;">
-        <label for="location">DBC File: </label>
-        <input type="text" id="dbc" name="dbc" placeholder="DBC File Name..." required>
+        <label for="dbc">DBC File: </label>
+        <select id="dbc" name="dbc">
+            <option value="WUFR22.dbc">WUFR22.dbc</option>
+        </select>
+        <!-- <input type="text" id="dbc" name="dbc" placeholder="DBC File Name..." value="WUFR22.dbc" readonly required> -->
     </div>
     <input type="file" accept="text/csv" id="file" name="file" required>
     <button>Upload</button>

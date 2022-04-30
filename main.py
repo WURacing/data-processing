@@ -1,5 +1,6 @@
 import waitress
-from dataviewer.app import create_app, db
+from dataviewer.app import create_app
+from dataviewer.models import db
 
 
 app = create_app()
