@@ -1,18 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
+<script src="/static/upload.js" defer></script>
+<link rel="stylesheet" href="/static/upload.css">
 <h1>Upload Data</h1>
-<form method="POST" enctype="multipart/form-data"
-    style="display: flex; flex-direction: column; max-width: fit-content; gap: 30px">
-    <div style="display: flex; gap: 5px;">
+<form method="POST" enctype="multipart/form-data" class="form">
+    <div class="label-component">
         <label for="location">Location: </label>
         <input type="text" id="location" name="location" placeholder="Location..." required>
     </div>
-    <div style="display: flex; gap: 5px;">
-        <label for="date">Run Date/Time: </label>
-        <input type="date" id="date" name="date" placeholder="Date/Time" required>
-        <input type="time" id="time" name="time" placeholder="Date/Time" required>
-    </div>
-    <div style="display: flex; gap: 5px;">
+    <div class="label-component">
         <label for="dbc">DBC File: </label>
         <select id="dbc" name="dbc">
             {% for dbc in dbcs %}
@@ -20,7 +16,8 @@
             {% endfor %}
         </select>
     </div>
-    <input type="file" accept="text/csv" id="file" name="file" required>
+    <input type="file" accept="text/csv" id="file" name="file" required multiple>
+    <div class="form-component" id="file-container"></div>
     <button>Upload</button>
 </form>
 {% endblock %}
