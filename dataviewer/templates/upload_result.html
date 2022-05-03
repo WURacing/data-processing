@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Upload Result</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Status</th>
+            <th>File</th>
+            <th>Error</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for file in files %}
+        <tr>
+            <td>{{ "✅" if file.success else "❌" }}</td>
+            <td>{{ file.name }}</td>
+            <td>{{ file.message or "N/A" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="/">Go Home</a>
+{% endblock %}

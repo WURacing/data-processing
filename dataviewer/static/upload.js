@@ -26,6 +26,7 @@ fileInput.onchange = (e) => {
         runName.type = "text";
         runName.placeholder = "Run name";
         runName.id = `run-name-${file.name}`;
+        runName.name = `run-name-${file.name}`;
         runName.value = `Run ${i + 1}`;
         runName.maxLength = "255";
 
@@ -35,6 +36,7 @@ fileInput.onchange = (e) => {
 
         const now = new Date();
         now.setMilliseconds(0);
+        now.setSeconds(0);
         const dateInputeContainer = document.createElement("div");
         dateInputeContainer.classList.add("label-component");
 
@@ -45,12 +47,14 @@ fileInput.onchange = (e) => {
         const runDate = document.createElement("input");
         runDate.type = "date";
         runDate.id = `run-date-${file.name}`;
+        runDate.name = `run-date-${file.name}`;
         runDate.valueAsDate = now;
         dateInputeContainer.appendChild(runDate);
 
         const runTime = document.createElement("input");
         runTime.type = "time";
         runTime.id = `run-time-${file.name}`;
+        runTime.name = `run-time-${file.name}`;
         runTime.valueAsNumber = now - now.getTimezoneOffset() * 60 * 1000;
         dateInputeContainer.appendChild(runTime);
 

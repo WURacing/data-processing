@@ -10,9 +10,10 @@
 <table>
     <thead>
         <tr>
-            <th>Run Location</th>
-            <th>Run Date</th>
-            <th>Run Time</th>
+            <th>Location</th>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Time</th>
             <th>Download All</th>
             <th>Filter Data</th>
         </tr>
@@ -21,6 +22,7 @@
         {% for run in runs %}
         <tr>
             <td>{{ run.location }}</td>
+            <td>{{ run.name }}</td>
             <td>{{ run.date }}</td>
             <td>{{ run.time }}</td>
             <td>
@@ -37,6 +39,7 @@
         {% endfor %}
     </tbody>
 </table>
+
 
 
 {% endblock %}

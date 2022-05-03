@@ -9,6 +9,7 @@ class Run(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     location = db.Column(db.String(255))
+    name = db.Column(db.String(255))
     dbc = db.Column(db.String(32), nullable=False)
     datetime = db.Column(db.DateTime, nullable=False)
 
