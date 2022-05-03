@@ -12,7 +12,7 @@
         {% for name, enabled in variables %}
         <div>
             <input type="checkbox" class="form-control" id="{{ name }}" name="{{ name }}" {% if not enabled %}
-                disabled{% endif%}>
+                disabled{% endif %}>
             <label for="{{ name }}">{{ name }}</label>
         </div>
         {% endfor %}

@@ -1,7 +1,8 @@
 import datetime
 from csv import DictReader, DictWriter
 from io import BytesIO, StringIO, TextIOWrapper
-from flask import Blueprint, render_template, request, send_file, url_for
+from zipfile import ZipFile
+from flask import Blueprint, render_template, request, send_file, url_for, Response
 from werkzeug.datastructures import FileStorage
 
 from dataviewer.can import decode_csv, get_variables, required_messages
@@ -16,6 +17,7 @@ def index():
     runs = Run.query.all()
     run_info = [
         {
+            "id": run.id,
             "location": run.location,
             "name": run.name,
             "date": run.datetime.strftime("%d %b %Y"),
@@ -49,6 +51,59 @@ def download_run(run_id: int):
         BytesIO(buffer.getvalue().encode("utf-8")),
         mimetype="text/csv",
         download_name=f"{run.location}_{run.name}_{run.datetime.isoformat()}.csv",
+    )
+
+
+@server.post("/bulk-download")
+def bulk_download():
+    ids = []
+    for name, value in request.form.items():
+        if value == "on":
+            ids.append(name)
+    runs: list[Run] = Run.query.filter(Run.id.in_(ids)).all()
+
+    stream = BytesIO()
+    with ZipFile(stream, "w") as zf:
+
+        for run in runs:
+            print(
+                "processing run",
+                f"/{run.location}_{run.name}_{run.datetime.isoformat()}.csv",
+            )
+            data = Timeseries.query.filter_by(run_id=run.id).all()
+            rows, names = decode_csv(run.dbc, data)
+
+            buffer = StringIO()
+            writer = DictWriter(buffer, fieldnames=names)
+            writer.writeheader()
+            for row in rows:
+                writer.writerow(row)
+
+            zf.writestr(
+                f"/{run.location}_{run.name}_{run.datetime.isoformat()}.csv",
+                buffer.getvalue(),
+            )
+        size = sum([zinfo.file_size for zinfo in zf.filelist])
+        print(f"zip size: {size}")
+    return Response(
+        stream.getvalue(),
+        mimetype="application/zip",
+        headers={"Content-Disposition": "attachment;filename=runs.zip"},
+    )
+
+
+@server.get("/test")
+def test():
+
+    stream = BytesIO()
+    with ZipFile(stream, "w") as zf:
+        for dbc in get_config().list_dbcs():
+            dbc_path = get_config().dbc_path(dbc)
+            zf.write(dbc_path, f"/{dbc}")
+    return Response(
+        stream.getvalue(),
+        mimetype="application/zip",
+        headers={"Content-Disposition": "attachment;filename=your_filename.zip"},
     )
 
 
