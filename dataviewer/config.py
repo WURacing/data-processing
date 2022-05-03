@@ -8,7 +8,7 @@ from flask import current_app
 class Config:
     """Configuration for the data viewer."""
 
-    can_file: str = os.environ.get("CAN_FILE", "../VEHICLE.dbc")
+    dbc_dir: str = os.environ.get("DBC_DIR", "dbc/")
     port: str = os.environ.get("DATABASE_PORT", "5432")
     dialect: str = os.environ.get("DATABASE_DIALECT", "postgresql")
     driver: str = os.environ.get("DATABASE_DRIVER", "psycopg2")
@@ -28,6 +28,12 @@ class Config:
             port=self.port,
             database=self.database,
         )
+
+    def list_dbcs(self) -> list[str]:
+        return os.listdir(self.dbc_dir)
+
+    def dbc_path(self, dbc_name: str) -> str:
+        return os.path.join(self.dbc_dir, dbc_name)
 
 
 def get_config() -> Config:

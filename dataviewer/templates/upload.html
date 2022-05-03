@@ -15,9 +15,10 @@
     <div style="display: flex; gap: 5px;">
         <label for="dbc">DBC File: </label>
         <select id="dbc" name="dbc">
-            <option value="WUFR22.dbc">WUFR22.dbc</option>
+            {% for dbc in dbcs %}
+            <option value="{{ dbc }}">{{ dbc }}</option>
+            {% endfor %}
         </select>
-        <!-- <input type="text" id="dbc" name="dbc" placeholder="DBC File Name..." value="WUFR22.dbc" readonly required> -->
     </div>
     <input type="file" accept="text/csv" id="file" name="file" required>
     <button>Upload</button>

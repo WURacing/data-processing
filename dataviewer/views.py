@@ -4,6 +4,7 @@ from io import BytesIO, StringIO, TextIOWrapper
 from flask import Blueprint, render_template, request, send_file, url_for
 
 from dataviewer.can import decode_csv, get_variables, required_messages
+from dataviewer.config import get_config
 from dataviewer.models import Run, Timeseries, db
 
 server = Blueprint("server", __name__)
@@ -27,14 +28,15 @@ def index():
 
 @server.get("/upload")
 def upload_page():
-    return render_template("upload.html", title="Upload Run")
+    config = get_config()
+    return render_template("upload.html", dbcs=config.list_dbcs(), title="Upload Run")
 
 
 @server.get("/download/<int:run_id>")
 def download_run(run_id: int):
-    run = Run.query.filter_by(id=run_id).first_or_404()
+    run = Run.by_id(run_id)
     data = Timeseries.query.filter_by(run_id=run_id).all()
-    rows, names = decode_csv(data)
+    rows, names = decode_csv(run.dbc, data)
 
     buffer = StringIO()
     writer = DictWriter(buffer, fieldnames=names)
@@ -50,20 +52,23 @@ def download_run(run_id: int):
 
 @server.post("/download/<int:run_id>/filter")
 def download_run_filtered(run_id: int):
+
+    run = Run.by_id(run_id)
+
     sensors = []
     for name, value in request.form.items():
         if value == "on":
             sensors.append(name)
 
-    messages = required_messages(sensors)
+    messages = required_messages(run.dbc, sensors)
 
-    run = Run.query.filter_by(id=run_id).first_or_404()
+    run = Run.by_id(run_id)
     data = (
         Timeseries.query.filter_by(run_id=run_id)
         .filter(Timeseries.msg_id.in_(messages))
         .all()
     )
-    rows, names = decode_csv(data, signals=set(sensors))
+    rows, names = decode_csv(run.dbc, data, signals=set(sensors))
     buffer = StringIO()
     writer = DictWriter(buffer, fieldnames=names)
     writer.writeheader()
@@ -105,7 +110,7 @@ def upload_file():
 
 @server.get("/filter/<int:run_id>")
 def filter_run(run_id: int):
-    run = Run.query.filter_by(id=run_id).first_or_404()
+    run = Run.by_id(run_id)
 
     msg_ids = (
         Timeseries.query.filter_by(run_id=run_id)
@@ -113,7 +118,7 @@ def filter_run(run_id: int):
         .distinct()
         .all()
     )
-    variables = get_variables([entry[0] for entry in msg_ids])
+    variables = get_variables(run.dbc, [entry[0] for entry in msg_ids])
 
     return render_template(
         "filter.html",

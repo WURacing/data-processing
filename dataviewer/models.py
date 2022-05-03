@@ -12,6 +12,10 @@ class Run(db.Model):
     dbc = db.Column(db.String(32), nullable=False)
     datetime = db.Column(db.DateTime, nullable=False)
 
+    @staticmethod
+    def by_id(id: int) -> "Run":
+        return Run.query.filter_by(id=id).first_or_404()
+
 
 class Timeseries(db.Model):
     __tablename__ = "timeseries"

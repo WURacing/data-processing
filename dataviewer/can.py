@@ -7,11 +7,12 @@ EXTENDED_MASK = 0x1FFFFFFF
 
 
 def decode_csv(
+    dbc_name: str,
     rows: list[Timeseries],
     signals: set[str] = None,
 ) -> tuple[list[dict[str, float | str]], list[str]]:
     config = get_config()
-    dbc = load_file(config.can_file)
+    dbc = load_file(config.dbc_path(dbc_name))
 
     field_names = set()
     messages = []
@@ -33,9 +34,9 @@ def decode_csv(
     return messages, ["time"] + list(field_names)
 
 
-def get_variables(active_messages: list[int]) -> list[tuple[str, bool]]:
+def get_variables(dbc_name: str, active_messages: list[int]) -> list[tuple[str, bool]]:
     config = get_config()
-    dbc = load_file(config.can_file)
+    dbc = load_file(config.dbc_path(dbc_name))
     signals = []
     for msg in dbc.messages:
         for signal in msg.signals:
@@ -44,9 +45,9 @@ def get_variables(active_messages: list[int]) -> list[tuple[str, bool]]:
     return signals
 
 
-def required_messages(sensors: list[str]):
+def required_messages(dbc_name: str, sensors: list[str]):
     config = get_config()
-    dbc = load_file(config.can_file)
+    dbc = load_file(config.dbc_path(dbc_name))
     messages = set()
 
     for msg in dbc.messages:
