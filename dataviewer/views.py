@@ -1,6 +1,7 @@
 import datetime
 from csv import DictReader, DictWriter
 from io import BytesIO, StringIO, TextIOWrapper
+import traceback
 from zipfile import ZipFile
 from flask import Blueprint, render_template, request, send_file, url_for, Response
 from werkzeug.datastructures import FileStorage
@@ -66,10 +67,6 @@ def bulk_download():
     with ZipFile(stream, "w") as zf:
 
         for run in runs:
-            print(
-                "processing run",
-                f"/{run.location}_{run.name}_{run.datetime.isoformat()}.csv",
-            )
             data = Timeseries.query.filter_by(run_id=run.id).all()
             rows, names = decode_csv(run.dbc, data)
 
@@ -83,27 +80,10 @@ def bulk_download():
                 f"/{run.location}_{run.name}_{run.datetime.isoformat()}.csv",
                 buffer.getvalue(),
             )
-        size = sum([zinfo.file_size for zinfo in zf.filelist])
-        print(f"zip size: {size}")
     return Response(
         stream.getvalue(),
         mimetype="application/zip",
         headers={"Content-Disposition": "attachment;filename=runs.zip"},
-    )
-
-
-@server.get("/test")
-def test():
-
-    stream = BytesIO()
-    with ZipFile(stream, "w") as zf:
-        for dbc in get_config().list_dbcs():
-            dbc_path = get_config().dbc_path(dbc)
-            zf.write(dbc_path, f"/{dbc}")
-    return Response(
-        stream.getvalue(),
-        mimetype="application/zip",
-        headers={"Content-Disposition": "attachment;filename=your_filename.zip"},
     )
 
 
@@ -151,6 +131,7 @@ def upload_file():
             upload_data(file, location, dbc)
             results.append({"name": file.filename, "success": True})
         except Exception as e:
+            traceback.print_exception(e)
             results.append({"success": False, "name": file.filename, "message": str(e)})
 
     return render_template("upload_result.html", files=results)
