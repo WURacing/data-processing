@@ -1,1 +1,0 @@
-from dataviewer.app import *
