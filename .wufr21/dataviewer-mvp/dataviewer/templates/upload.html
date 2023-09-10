@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<script src="/static/upload.js" defer></script>
+<link rel="stylesheet" href="/static/upload.css">
+<h1>Upload Data</h1>
+<form method="POST" enctype="multipart/form-data" class="form">
+    <div class="label-component">
+        <label for="location">Location: </label>
+        <input type="text" id="location" name="location" placeholder="Location..." required>
+    </div>
+    <div class="label-component">
+        <label for="dbc">DBC File: </label>
+        <select id="dbc" name="dbc">
+            {% for dbc in dbcs %}
+            <option value="{{ dbc }}">{{ dbc }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <input type="file" accept="text/csv" id="file" name="file" required multiple>
+    <div class="form-component" id="file-container"></div>
+    <button>Upload</button>
+</form>
+{% endblock %}
