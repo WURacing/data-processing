@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  api:
+    build: ./api
+    container_name: "dataviewerapi"
+    ports:
+    - "3001:80"
+    - "9999:9999/udp"
+    volumes:
+    - "./data:/data"
+    environment:
+      DATABASE_URL: "mysql+mysqlconnector://root:gofastgofast@db/data"
+  
+  db:
+    image: mariadb:10.2
+    container_name: db
+    volumes:
+    - ./data/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: gofastgofast
+      MYSQL_DATABASE: data
+  
+
+# after docker-compose up, you need to run
+#   docker-compose run api flask db upgrade
+# to create/update the database definitions
